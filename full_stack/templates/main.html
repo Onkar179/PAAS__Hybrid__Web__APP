@@ -1,0 +1,288 @@
+<script>
+    function cmd(){
+        var xhr = new XMLHttpRequest();
+    xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x="+document.getElementById('in1').value,"true");
+    xhr.send();
+        
+
+        xhr.onload = function() {
+            var output = xhr.responseText;
+            document.getElementById("d1").innerHTML =   document.getElementById("d1").innerHTML   +      "\n\n" + output;
+
+        }
+    }
+    function autotype(){
+
+        document.getElementById("d1").innerHTML = "[root@localhost]# " + document.getElementById("in1").value
+    }
+    function docker(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=docker ps -a" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+
+    function docker_nw(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=docker network ls" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+
+    function docker_volume(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=docker volume ls" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function docker_remove(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=docker rm -f $(docker ps -aq)" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function kubeconfig(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=kubectl config view" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function kubeconfig(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=kubectl config view" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function kube_ds(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=kubectl get ds -n kube-system" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function kube_all(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=kubectl get all " , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+    function kube_delete(){
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "http://192.168.43.35/cgi-bin/cmd.py?x=kubectl delete all --all" , "true");
+      xhr.send();
+
+      xhr.onload = function () {
+        var output = xhr.responseText;
+        document.getElementById("d1").innerHTML = output;
+        
+      }
+    }
+
+</script>
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<title>HybridOps WebAPP</title>
+<body style="background-image: url('/static/main.gif');">
+<style> 
+.button {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+.button:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+.outer {color: #4CAF50;}
+.outer > * {
+  display:inline-block;
+  vertical-align:middle;
+  background-color:lightgreen;
+  padding-top: 20px;
+ 
+}
+.ipdesign { 
+    text-align: center; 
+    width: 300px;
+    height: 70px;
+    background-color: black;
+    border: 10px solid;
+    border-style: outset;
+    border-color: yellowgreen;
+    color: white;
+}
+.flip-card {
+  background-color: transparent;
+  width: 300px;
+  height: 300px;
+  perspective: 1000px;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+  box-shadow: 0 4px 8px 0 rgba(20, 17, 17, 0.2);
+}
+
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
+.flip-card-front {
+  background-color: #bbb;
+  color: black;
+}
+
+.flip-card-back {
+  background-color: yellowgreen;
+  color: white;
+  transform: rotateY(180deg);
+}
+</style>
+<center>
+<div style="padding-top: 40px;"><input class="ipdesign" placeholder="Enter Your Command"  id="in1" name="cmd" onkeyup="autotype()" />
+</div>
+<br />
+<pre>
+<div style="
+    border: 20px solid;
+    border-color: blueviolet;
+    border-style: solid;
+    padding: 40px; 
+    width: 400px;
+    resize: both;
+    overflow: auto;
+    background-color: black;
+    color: white; text-align: left;" id="d1">
+</pre>
+<button class="button"  onclick="cmd()">Run Command</button>
+</div>
+</center>
+<div style="padding-top: 5px; padding-left: 80px;" class="outer">
+    <div class="flip-card">
+      <div class="flip-card-inner">
+        <div class="flip-card-front">
+          <img src="/static/file.gif"  style="width:300px;height:300px;">
+        </div>
+        <div class="flip-card-back">
+             <form enctype = "multipart/form-data" action = "/file" method = "post">
+             <br>
+             <p style="color: black;"><b>File: </b><input type = "file" name = "filename"  style="color: black;"/></p>
+             <br>
+             <p><b><input type = "submit" value = "Upload"  style="width: 100px; height: 40px; background-color: aqua;"/></b></p> 
+	     </form>
+             <h1 style="color: purple; font-style: italic;">Upload Your Workspace </h1>         
+      </div>    
+</div>
+</div>
+	     
+  <div class="flip-card" style="padding-left: 100px;">
+    <div class="flip-card-inner">
+      <div class="flip-card-front">
+        <img src="/static/HELPER.gif"  style="width:300px;height:300px;">
+      </div>
+      <div class="flip-card-back">
+        <br>
+        <br>
+        <button id="b1" onclick="docker()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color: purple;">List All Docker Containers</button>
+        <button id="b2" onclick="docker_nw()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color:purple;">List Docker Network Cards</button>
+        <button id="b3" onclick="docker_volume()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color: purple;">List Docker Volumes</button>
+        <button id="b4" onclick="docker_remove()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color: purple;">Remove All Docker Containers</button>
+        <button id="b1" onclick="kubeconfig()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color: purple;">Show Kubeconfig Context</button>
+        <button id="b2" onclick="kube_ds()" style="width: 200px; height: 30px; border: 3px solid; border-style: solid; border-color: purple;">Show All K8S Daemon Sets</button>
+        <button id="b3" onclick="kube_all()" style="width: 200px; height: 30px ;border: 3px solid; border-style: solid; border-color: purple;">List All Kubernetes Resources</button>
+        <button id="b4" onclick="kube_delete()" style="width: 200px; height: 40px; border: 3px solid; border-style: solid; border-color: purple;">Delete All Kuberentes Resources</button>
+       
+    
+
+    </div>    
+</div>
+</div>
+
+<div class="flip-card" style="padding-left: 100px;">
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="/static/pollygif.gif"  style="width:300px;height:300px;">
+    </div>
+    <div class="flip-card-back">
+         <form action = "/polly" method = "GET">
+         <img src="/static/Dumas_voice_0.jpg"  style="width: 300px; height: 230px;">
+         <p><input type="submit" value="Explore" style="font-style: italic; background-color: black; color: rgb(131, 131, 1); width: 100px; height: 30px; border: 3px solid; border-style: solid; border-color:purple;"></p>      
+	 </form>
+    </div>    
+</div>
+</div>
+
+</div>
+
+</body>
+</html>
+
+

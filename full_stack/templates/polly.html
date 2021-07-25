@@ -1,0 +1,175 @@
+  
+<html>
+
+    <head>
+        <script>
+            var AUDIO_FORMATS = {
+                'ogg_vorbis': 'audio/ogg',
+                'mp3': 'audio/mpeg',
+                'pcm': 'audio/wave; codecs=1'
+            };
+    
+            function fetchJSON(method, url, onSuccess, onError) {
+                var request = new XMLHttpRequest();
+                request.open(method, url, true);
+                request.onload = function () {
+                  
+                    if (request.readyState === 4) {
+                        
+                        if (request.status === 200) {
+                            var data;
+    
+                           
+                            try {
+                                data = JSON.parse(request.responseText);
+                            } catch (error) {
+                                onError(request.status, error.toString());
+                            }
+    
+                            onSuccess(data);
+                        } else {
+                            onError(request.status, request.responseText)
+                        }
+                    }
+                };
+    
+                request.send();
+            }
+    
+           
+            function getSupportedAudioFormats(player) {
+                return Object.keys(AUDIO_FORMATS)
+                    .filter(function (format) {
+                        var supported = player.canPlayType(AUDIO_FORMATS[format]);
+                        return supported === 'probably' || supported === 'maybe';
+                    });
+            }
+    
+            
+            document.addEventListener("DOMContentLoaded", function () {
+                var input = document.getElementById('input'),
+                    voiceMenu = document.getElementById('voice'),
+                    text = document.getElementById('text'),
+                    player = document.getElementById('player'),
+                    submit = document.getElementById('submit'),
+                    supportedFormats = getSupportedAudioFormats(player);
+    
+                if (supportedFormats.length === 0) {
+                    submit.disabled = true;
+                    alert('The web browser in use does not support any of the' +
+                          ' available audio formats. Please try with a different' +
+                          ' one.');
+                }
+    
+                input.addEventListener('submit', function (event) {
+                
+                    if (voiceMenu.selectedIndex <= 0 || text.value.length === 0) {
+                        alert('Please fill in all the fields.');
+                    } else {
+                        var selectedVoice = voiceMenu
+                                                .options[voiceMenu.selectedIndex]
+                                                .value;
+    
+                       
+                        player.src = '/audio?voiceId=' +
+                            encodeURIComponent(selectedVoice) +
+                            '&text=' + encodeURIComponent(text.value) +
+                            '&outputFormat=' + supportedFormats[0];
+                        player.play();
+                    }
+    
+                    event.preventDefault();
+                });
+    
+                fetchJSON('GET', '/voices',
+                    
+                    function (voices) {
+                        var container = document.createDocumentFragment();
+     
+                       
+                        voices.forEach(function (voice) {
+                            var option = document.createElement('option');
+                            option.value = voice['Id'];
+                            option.innerHTML = voice['Name'] + ' (' +
+                                voice['Gender'] + ', ' +
+                                voice['LanguageName'] + ')';
+                            container.appendChild(option);
+                        });
+    
+                      
+                        voiceMenu.appendChild(container);
+                        voiceMenu.disabled = false;
+                    },
+               
+                    function (status, response) {
+                        alert(status + ' - ' + response);
+                    });
+            });
+    
+        </script>
+        <style>
+        
+            .outer {color: yellow;}
+            .outer > * {
+  display:inline-block;
+  vertical-align:middle;
+  
+            }
+         
+         .box1{   border: 20px solid;
+    border-color: blueviolet;
+    border-style: ridge;
+    padding: 40px; 
+    width: 400px;
+    resize: both;
+    overflow: auto;
+    background-color: black;
+    color: white; text-align: left;
+         }
+
+         .b2 {
+  
+  border: none;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  margin: 4px 2px;
+  cursor: pointer;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  
+}
+.b2:hover {
+  box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24),0 17px 50px 0 rgba(0,0,0,0.19);
+}
+
+        </style>
+    </head>
+    <title>AWS Polly Text TO Speech</title> 
+    <body style="background-image: url('/static/polly-bg.gif');">
+        <center>
+        <form id="input" method="GET" action="/audio">
+            <div class="outer" style="color: yellow; font-style: italic; ">
+                <label for="voice"><h1><b>Select A Voice:</b></h1></label>
+                <div style="padding-left: 50px; padding-top: 15px;">
+                <select id="voice" name="voiceId" disabled>
+                    <option value="">Choose A Voice...</option>
+                </select>
+            </div>
+            </div>
+            
+            <div style="padding-top: 20px;">
+<textarea id="text" maxlength="1000" minlength="1" name="text" class="box1" style="color: yellow;"
+placeholder="Type Your Text Here.........."></textarea>
+
+            </div>
+            <div style="padding-top: 50px;">
+            <input type="submit" class="b2" value="Speak It Out" id="submit" style="color: green; border: 5px solid; border-color: white; border-style: solid; font-style: italic; font-weight: bold; background-color:black;"  />
+            </div>
+        </form>
+        <audio id="player"></audio>
+    </center>
+    </body>
+    
+    </html>
